@@ -1,42 +1,24 @@
-import { CssBaseline } from "@material-ui/core";
-import { ThemeProvider } from "@material-ui/core/styles";
-import { SnackbarProvider } from "notistack";
-import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
-import { HashRouter } from "react-router-dom";
-import App from "./App";
-import BackgroundImage from "./components/BackgroundImage";
-import { BetaContextProvider } from "./contexts/BetaContext";
-import { EthereumProviderProvider } from "./contexts/EthereumProviderContext";
-import { SolanaWalletProvider } from "./contexts/SolanaWalletContext.tsx";
-import { TerraWalletProvider } from "./contexts/TerraWalletContext.tsx";
-import ErrorBoundary from "./ErrorBoundary";
-import { theme } from "./muiTheme";
-import { store } from "./store";
+import { MuiThemeProvider } from '@material-ui/core'
+import { ThemeProvider } from '@mui/material/styles'
+import ReactDOM from 'react-dom'
+import { HashRouter } from 'react-router-dom'
+import App from './App'
+import { EthereumProviderProvider } from './wormhole2/contexts/EthereumProviderContext'
+import { SolanaWalletProvider } from './wormhole2/contexts/SolanaWalletContext.tsx'
+import { theme } from './muiTheme'
 
 ReactDOM.render(
-  <ErrorBoundary>
-    <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <ErrorBoundary>
-          <SnackbarProvider maxSnack={3}>
-            <BetaContextProvider>
-              <SolanaWalletProvider>
-                <EthereumProviderProvider>
-                  <TerraWalletProvider>
-                    <HashRouter>
-                      <BackgroundImage />
-                      <App />
-                    </HashRouter>
-                  </TerraWalletProvider>
-                </EthereumProviderProvider>
-              </SolanaWalletProvider>
-            </BetaContextProvider>
-          </SnackbarProvider>
-        </ErrorBoundary>
-      </ThemeProvider>
-    </Provider>
-  </ErrorBoundary>,
-  document.getElementById("root")
-);
+        <MuiThemeProvider theme={theme}>
+            <ThemeProvider theme={theme}>
+                <SolanaWalletProvider>
+                    <EthereumProviderProvider>
+                        <HashRouter>
+                            <App />
+                        </HashRouter>
+                    </EthereumProviderProvider>
+                </SolanaWalletProvider>
+            </ThemeProvider>
+        </MuiThemeProvider>
+    ,
+    document.getElementById('wormhole')
+)

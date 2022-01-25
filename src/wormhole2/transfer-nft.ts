@@ -25,7 +25,7 @@ export const transferNft = async (
     sourceTokenId: string,
     ethProvider: IEthereumProviderContext,
     solanaWallet: WalletContextState
-) => {
+): Promise<string> => {
     if (!solanaWallet.publicKey) {
         return Promise.resolve('Missing sol pubkey')
     }
@@ -37,7 +37,7 @@ export const transferNft = async (
             solanaWallet.publicKey
         )
 
-        console.log({targetAddressPubKey: targetAddressPubKey.toBase58()})
+        console.log({ targetAddressPubKey: targetAddressPubKey.toBase58() })
 
 
         const targetAddress = hexToUint8Array(
@@ -45,13 +45,12 @@ export const transferNft = async (
         )
 
         // eslint-disable-next-line react-hooks/rules-of-hooks
-        const transferNftFromEth = useHandleNFTTransfer(
+        const signedVAA = await useHandleNFTTransfer(
             sourceAsset,
             sourceTokenId,
             targetAddress,
             ethProvider
-        )
-        const signedVAA = await transferNftFromEth()
+        )()
 
         // eslint-disable-next-line no-console
         console.log(`Successfully transfered, signedVaa: ${signedVAA}`)
@@ -61,8 +60,7 @@ export const transferNft = async (
         }
 
         // eslint-disable-next-line react-hooks/rules-of-hooks
-        const redeemNftSolana = useHandleNFTRedeem(solanaWallet, signedVAA)
-        await redeemNftSolana()
+        return await useHandleNFTRedeem(solanaWallet, signedVAA)()
     } catch (e: any) {
         // eslint-disable-next-line no-console
         console.log(e)

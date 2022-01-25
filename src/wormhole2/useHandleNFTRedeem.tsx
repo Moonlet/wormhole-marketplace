@@ -32,6 +32,7 @@ async function solana(
     signedVAA: Uint8Array
 ) {
     // dispatch(setIsRedeeming(true))
+    let finalMintAddress = ''
     try {
         if (!wallet.signTransaction) {
             throw new Error('wallet.signTransaction is undefined')
@@ -75,6 +76,8 @@ async function solana(
                 hexToUint8Array(originAddress),
                 arrayify(tokenId)
             )
+            console.log({mintAddress})
+            finalMintAddress = mintAddress
             const [metadataAddress] = await getMetadataAddress(mintAddress)
             const metadata = await connection.getAccountInfo(metadataAddress)
             if (!metadata) {
@@ -86,7 +89,6 @@ async function solana(
                     signedVAA
                 )
                 txid = await signSendAndConfirm(wallet, connection, transaction)
-                // eslint-disable-next-line no-console
                 // eslint-disable-next-line no-console
                 console.log('create meta Tx: ', txid)
             }
@@ -103,6 +105,8 @@ async function solana(
         // })
         // dispatch(setIsRedeeming(false))
     }
+
+    return finalMintAddress
 }
 
 export const useHandleNFTRedeem = (solanaWallet: WalletContextState, signedVAAHex: string) => {
@@ -111,7 +115,7 @@ export const useHandleNFTRedeem = (solanaWallet: WalletContextState, signedVAAHe
 
     return () => {
         if (TARGET_CHAIN === CHAIN_ID_SOLANA && !!solanaWallet && !!solPK && signedVAA) {
-            solana(solanaWallet, solPK.toString(), signedVAA)
+            return solana(solanaWallet, solPK.toString(), signedVAA)
         }
     }
 }

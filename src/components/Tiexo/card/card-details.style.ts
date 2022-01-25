@@ -1,24 +1,26 @@
 import { css } from '@emotion/css'
-import { Theme } from '@mui/material'
 import { createUseStyle } from '../theme'
 
-export default createUseStyle((theme: Theme) => ({
+export default createUseStyle(() => ({
     wrapper: css`
-        background-color: ${theme.palette.background.paper};
-        width: 100%;
-        height: 100%;
+        background-color: #3f4c54;
         border-radius: 8px;
         display: flex;
         flex: 1;
         flex-direction: column;
         align-items: center;
 
+        width: 250px;
+        height: 422px;
+
+        margin: 20px;
+
         img {
             border-radius: 8px 8px 0 0;
         }
     `,
     detailsWrapper: css`
-        color: ${theme.palette.common.white};
+        color: #e1e1e1;
         text-align: center;
         padding: 5px 5px 0 5px;
         width: 100%;
@@ -27,28 +29,6 @@ export default createUseStyle((theme: Theme) => ({
         flex-direction: column;
         justify-content: space-between;
         min-height: 124px;
-
-        .very-scarce {
-            color: ${theme.palette.primary.main};
-        }
-
-        .scarce {
-            color: ${theme.palette.primary.main};
-            opacity: 0.5;
-        }
-
-        .abundant {
-            color: ${theme.palette.secondary.main};
-            opacity: 0.5;
-        }
-
-        .very-abundant {
-            color: ${theme.palette.secondary.main};
-        }
-
-        .neutral {
-            color: #979797;
-        }
     `,
     imgWrapper: css`
         display: flex;
@@ -65,7 +45,7 @@ export default createUseStyle((theme: Theme) => ({
         }
     `,
     incomingWrapper: css`
-        background-color: ${theme.palette.background.paper};
+        background-color: #3f4c54;
         width: 100%;
         height: 100%;
         border-radius: 8px;
@@ -79,7 +59,7 @@ export default createUseStyle((theme: Theme) => ({
         }
     `,
     detailsIncoming: css`
-        color: ${theme.palette.common.white};
+        color: #4e4e54;
         text-align: center;
         padding: 5px 5px 0 5px;
         width: 100%;
@@ -93,35 +73,15 @@ export default createUseStyle((theme: Theme) => ({
             font-size: 18px;
             margin: 0px;
         }
-
-        .very-scarce {
-            color: ${theme.palette.primary.main};
-        }
-
-        .scarce {
-            color: ${theme.palette.primary.main};
-            opacity: 0.5;
-        }
-
-        .abundant {
-            color: ${theme.palette.secondary.main};
-            opacity: 0.5;
-        }
-
-        .very-abundant {
-            color: ${theme.palette.secondary.main};
-        }
-
-        .neutral {
-            color: #979797;
-        }
     `,
     button: css`
         height: 32px;
-        border: 1px solid ${theme.palette.primary.main};
+        border: 1px solid '#75fcc6';
         border-radius: 4px !important;
         padding: 6px 16px !important;
         margin-bottom: 13px !important;
+        color: #75fcc6 !important;
+        border-color: #75fcc6 !important;
 
         &:disabled,
         &[disabled] {
@@ -164,5 +124,27 @@ export default createUseStyle((theme: Theme) => ({
         * {
             margin: 0;
         }
+    `,
+
+    addWrapper: css`
+        width: 250px;
+        height: 422px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        input {
+            color: #e1e1e1 !important;
+        }
+        .MuiInputLabel-root {
+            color: #e1e1e1
+        }
+        .MuiButton-root {
+            color: #e1e1e1 !important;
+            border-color:  #3f4c54 !important;
+        }
+    `,
+    loader: css`
+        color: #21272d;
     `,
 }))

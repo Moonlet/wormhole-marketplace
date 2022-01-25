@@ -6,11 +6,71 @@ import {
 } from "@certusone/wormhole-sdk";
 import { ethers } from "ethers";
 import { arrayify, formatUnits } from "ethers/lib/utils";
-import {
-  createNFTParsedTokenAccount,
-  createParsedTokenAccount,
-} from "../hooks/useGetSourceParsedTokenAccounts";
 
+
+export function createParsedTokenAccount(
+    publicKey: string,
+    mintKey: string,
+    amount: string,
+    decimals: number,
+    uiAmount: number,
+    uiAmountString: string,
+    symbol?: string,
+    name?: string,
+    logo?: string,
+    isNativeAsset?: boolean
+  ): any {
+    return {
+      publicKey: publicKey,
+      mintKey: mintKey,
+      amount,
+      decimals,
+      uiAmount,
+      uiAmountString,
+      symbol,
+      name,
+      logo,
+      isNativeAsset,
+    };
+  }
+
+export function createNFTParsedTokenAccount(
+    publicKey: string,
+    mintKey: string,
+    amount: string,
+    decimals: number,
+    uiAmount: number,
+    uiAmountString: string,
+    tokenId: string,
+    symbol?: string,
+    name?: string,
+    uri?: string,
+    animation_url?: string,
+    external_url?: string,
+    image?: string,
+    image_256?: string,
+    nftName?: string,
+    description?: string
+  ): any {
+    return {
+      publicKey,
+      mintKey,
+      amount,
+      decimals,
+      uiAmount,
+      uiAmountString,
+      tokenId,
+      uri,
+      animation_url,
+      external_url,
+      image,
+      image_256,
+      symbol,
+      name,
+      nftName,
+      description,
+    };
+  }
 //This is a valuable intermediate step to the parsed token account, as the token has metadata information on it.
 export async function getEthereumToken(
   tokenAddress: string,
@@ -40,6 +100,7 @@ export async function ethTokenToParsedTokenAccount(
   );
 }
 
+// other
 //This is a valuable intermediate step to the parsed token account, as the token has metadata information on it.
 export async function getEthereumNFT(
   tokenAddress: string,
@@ -59,6 +120,7 @@ export async function isNFT(token: NFTImplementation) {
   return supportsErc721 && supportsErc721Metadata;
 }
 
+// this
 export async function ethNFTToNFTParsedTokenAccount(
   token: NFTImplementation,
   tokenId: string,
