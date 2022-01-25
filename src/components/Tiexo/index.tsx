@@ -17,8 +17,9 @@ import ProgressBar from './loader/progress-bar'
 
 const sourceAsset = '0xdff0cbb0a50cc3eaf8242414380eb04c7283f513'
 const sourceTokenId =
-    '15487864439031792820769872793764920336287736338831218889832296222679724195849'
+    '15487864439031792820769872793764920336287736338831218889832296222679724195853'
 
+// 15487864439031792820769872793764920336287736338831218889832296222679724195854
 declare global {
     interface Window {
         solana: any
@@ -44,16 +45,21 @@ const Tiexo: React.FC = () => {
 
     useEffectAsync(async () => {
         ethWallet?.connect()
-        solWallet?.select(WalletName.Phantom)
+        solWallet?.select?.(WalletName.Phantom)
     }, [])
 
-    useEffect(() => {
-        if (solWallet.wallet && !solWallet.connected) {
-            console.log('connect wallet')
-            solWallet.connect()
+    useEffectAsync(async () => {
+        const { connected, wallet, connect, ready } = solWallet
+        if (!connected && wallet && ready) {
+            await connect()
         }
-        sendPostMessage('test message')
-    }, [solWallet.wallet?.name])
+    }, [solWallet.connected, solWallet.wallet?.name, solWallet.ready])
+
+    // useEffect(() => {
+    //     if (solWallet.wallet && !solWallet.connected) {
+    //         solWallet.connect()
+    //     }
+    // }, [solWallet.wallet?.name])
 
     console.log('eth: ', ethWallet.signerAddress)
     console.log('sol: ', solWallet.publicKey?.toBase58())
@@ -121,8 +127,11 @@ const Tiexo: React.FC = () => {
             const mint = await transferNft(nft.address, nft.tokenId, ethWallet, solWallet)
             console.log({ mint })
             sendPostMessage('Success.')
-            window.location.href = `${window.location.hostname}/marketplace/nft/${mint}`
+            window.location.href = `${
+                window.location.origin
+            }/marketplace/nft/${'3k5AG1VM5BMjNj1AaRFjCDn5fkSotVWYY5yJwJbPo2tY'}`
         } catch (e) {
+            sendPostMessage('Failed to transfer the NFT, try again later')
             console.log('Failed to transfer the NFT ', e)
         }
     }
@@ -157,9 +166,8 @@ const Tiexo: React.FC = () => {
     return (
         <div style={{ display: 'flex' }}>
             {nfts.map((nft, index) => (
-                <div>
+                <div key={index}>
                     <CardDetails
-                        key={index}
                         title={nft.name}
                         description={nft.description}
                         imgURI={nft.image}

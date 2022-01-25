@@ -8,17 +8,16 @@ import { SolanaWalletProvider } from './wormhole2/contexts/SolanaWalletContext.t
 import { theme } from './muiTheme'
 
 ReactDOM.render(
-        <MuiThemeProvider theme={theme}>
-            <ThemeProvider theme={theme}>
-                <SolanaWalletProvider>
-                    <EthereumProviderProvider>
-                        <HashRouter>
-                            <App />
-                        </HashRouter>
-                    </EthereumProviderProvider>
-                </SolanaWalletProvider>
-            </ThemeProvider>
-        </MuiThemeProvider>
-    ,
+    <MuiThemeProvider theme={theme}>
+        <ThemeProvider theme={theme}>
+            <SolanaWalletProvider>
+                <EthereumProviderProvider>
+                    <HashRouter>
+                        <App />
+                    </HashRouter>
+                </EthereumProviderProvider>
+            </SolanaWalletProvider>
+        </ThemeProvider>
+    </MuiThemeProvider>,
     document.getElementById('wormhole')
 )

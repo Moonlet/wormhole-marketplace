@@ -37,6 +37,7 @@ async function evm(
 ): Promise<string | null> {
     // dispatch(setIsSending(true))
     try {
+        sendPostMessage('Wait confirmation on Ethereum blockchain...')
         const receipt = await transferFromEth(
             getNFTBridgeAddressForChain(chainId),
             signer,
@@ -62,7 +63,11 @@ async function evm(
         //   content: <Alert severity="info">Fetching VAA</Alert>,
         // })
         sendPostMessage('Fetching VAA...')
-        const { vaaBytes } = await getSignedVAAWithRetry(chainId, emitterAddress, sequence.toString())
+        const { vaaBytes } = await getSignedVAAWithRetry(
+            chainId,
+            emitterAddress,
+            sequence.toString()
+        )
         sendPostMessage('Fetched Signed VAA successfully...')
         return uint8ArrayToHex(vaaBytes)
         // dispatch(setSignedVAAHex(uint8ArrayToHex(vaaBytes)))

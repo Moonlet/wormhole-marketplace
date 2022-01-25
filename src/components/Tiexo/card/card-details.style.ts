@@ -10,8 +10,8 @@ export default createUseStyle(() => ({
         flex-direction: column;
         align-items: center;
 
-        width: 250px;
-        height: 422px;
+        width: 276px;
+        height: 403px;
 
         margin: 20px;
 
@@ -127,8 +127,8 @@ export default createUseStyle(() => ({
     `,
 
     addWrapper: css`
-        width: 250px;
-        height: 422px;
+        width: 276px;
+        height: 403px;
         display: flex;
         align-items: center;
         justify-content: center;
