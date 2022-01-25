@@ -22,6 +22,7 @@ import {
     SOL_NFT_BRIDGE_ADDRESS,
 } from './utils/consts'
 import { getSignedVAAWithRetry } from './utils/getSignedVAAWithRetry'
+import { sendPostMessage } from './utils/helper'
 
 // eth tx
 async function evm(
@@ -53,12 +54,16 @@ async function evm(
         // enqueueSnackbar(null, {
         //   content: <Alert severity="success">Transaction confirmed</Alert>,
         // })
+        sendPostMessage('Transaction confirmed.')
+
         const sequence = parseSequenceFromLogEth(receipt, getBridgeAddressForChain(chainId))
         const emitterAddress = getEmitterAddressEth(getNFTBridgeAddressForChain(chainId))
         // enqueueSnackbar(null, {
         //   content: <Alert severity="info">Fetching VAA</Alert>,
         // })
+        sendPostMessage('Fetching VAA...')
         const { vaaBytes } = await getSignedVAAWithRetry(chainId, emitterAddress, sequence.toString())
+        sendPostMessage('Fetched Signed VAA successfully...')
         return uint8ArrayToHex(vaaBytes)
         // dispatch(setSignedVAAHex(uint8ArrayToHex(vaaBytes)))
         // enqueueSnackbar(null, {

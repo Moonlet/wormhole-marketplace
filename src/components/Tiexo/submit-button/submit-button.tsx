@@ -24,7 +24,9 @@ const SubmitButton: React.FC<ISubmitButtonProps> = (props: ISubmitButtonProps) =
             {!loading ? (
                 label
             ) : (
-                <CircularProgress size={24} color={'primary'} className={style.loader} />
+                <div className={style.loader}>
+                    <CircularProgress size={23} color={'inherit'} style={{ display: 'flex' }} />
+                </div>
             )}
         </Button>
     )

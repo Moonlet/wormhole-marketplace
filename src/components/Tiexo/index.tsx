@@ -1,6 +1,6 @@
 import { NFTImplementation } from '@certusone/wormhole-sdk'
 import { TextField } from '@mui/material'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useEthereumProvider } from '../../wormhole2/contexts/EthereumProviderContext'
 import { useSolanaWallet } from '../../wormhole2/contexts/SolanaWalletContext'
 import { transferNft } from '../../wormhole2/transfer-nft'
@@ -11,8 +11,9 @@ import SubmitButton from './submit-button/submit-button'
 import useEffectAsync from './use-effect-async'
 
 import Typography from '@mui/material/Typography'
-
-const SEVER_URL = 'http://localhost:3000/marketplace/nft'
+import { WalletName } from '@solana/wallet-adapter-wallets'
+import { sendPostMessage } from '../../wormhole2/utils/helper'
+import ProgressBar from './loader/progress-bar'
 
 const sourceAsset = '0xdff0cbb0a50cc3eaf8242414380eb04c7283f513'
 const sourceTokenId =
@@ -43,15 +44,16 @@ const Tiexo: React.FC = () => {
 
     useEffectAsync(async () => {
         ethWallet?.connect()
-        // solWallet?.select(WalletName.Phantom)
+        solWallet?.select(WalletName.Phantom)
     }, [])
 
-    // useEffect(() => {
-    //     if (solWallet.wallet && !solWallet.connected) {
-    //         console.log('connect wallet')
-    //         solWallet.connect()
-    //     }
-    // }, [solWallet.wallet?.name])
+    useEffect(() => {
+        if (solWallet.wallet && !solWallet.connected) {
+            console.log('connect wallet')
+            solWallet.connect()
+        }
+        sendPostMessage('test message')
+    }, [solWallet.wallet?.name])
 
     console.log('eth: ', ethWallet.signerAddress)
     console.log('sol: ', solWallet.publicKey?.toBase58())
@@ -108,16 +110,20 @@ const Tiexo: React.FC = () => {
     }, [ethWallet?.signerAddress])
 
     const onTransferToSol = async (nft: NFTDto) => {
-        window?.parent?.postMessage(
+        window?.postMessage(
             {
                 type: 'wormhole-start-processing',
             },
             '*'
         )
-        const mint = await transferNft(nft.address, nft.tokenId, ethWallet, solWallet)
-        console.log({ mint })
-        if (window?.top?.location?.href) {
-            window.top.location.href = `${SEVER_URL}/${mint}`
+        try {
+            sendPostMessage('Start processing...')
+            const mint = await transferNft(nft.address, nft.tokenId, ethWallet, solWallet)
+            console.log({ mint })
+            sendPostMessage('Success.')
+            window.location.href = `${window.location.hostname}/marketplace/nft/${mint}`
+        } catch (e) {
+            console.log('Failed to transfer the NFT ', e)
         }
     }
 
@@ -138,6 +144,14 @@ const Tiexo: React.FC = () => {
         } finally {
             setAddLoader(false)
         }
+    }
+
+    if (sourceAsset && sourceTokenId && nfts.length === 0) {
+        return (
+            <div style={{ marginLeft: '48%', marginTop: '15%' }}>
+                <ProgressBar />
+            </div>
+        )
     }
 
     return (
@@ -162,6 +176,7 @@ const Tiexo: React.FC = () => {
                     variant="outlined"
                     label="Address"
                     value={holderString}
+                    autoComplete="off"
                     onChange={event => setHolderString(event.target.value)}
                     fullWidth
                     margin="normal"
@@ -170,6 +185,7 @@ const Tiexo: React.FC = () => {
                     variant="outlined"
                     label="Token Id"
                     value={tokenIdHolderString}
+                    autoComplete="off"
                     onChange={event => setTokenIdHolderString(event.target.value)}
                     fullWidth
                     margin="normal"

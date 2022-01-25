@@ -21,6 +21,7 @@ import {
     SOL_BRIDGE_ADDRESS,
     SOL_NFT_BRIDGE_ADDRESS,
 } from './utils/consts'
+import { sendPostMessage } from './utils/helper'
 import { getMetadataAddress } from './utils/metaplex'
 import { signSendAndConfirm } from './utils/solana'
 
@@ -42,6 +43,7 @@ async function solana(
         const claimInfo = await connection.getAccountInfo(claimAddress)
         let txid
         if (!claimInfo) {
+            sendPostMessage('Post VAA on Solana...')
             await postVaaSolanaWithRetry(
                 connection,
                 wallet.signTransaction,
@@ -81,6 +83,7 @@ async function solana(
             const [metadataAddress] = await getMetadataAddress(mintAddress)
             const metadata = await connection.getAccountInfo(metadataAddress)
             if (!metadata) {
+                sendPostMessage('Create metadata on Solana...')
                 const transaction = await createMetaOnSolana(
                     connection,
                     SOL_BRIDGE_ADDRESS,

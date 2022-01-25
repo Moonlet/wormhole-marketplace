@@ -16,8 +16,9 @@ import { IEthereumProviderContext } from './contexts/EthereumProviderContext'
 import { useHandleNFTRedeem } from './useHandleNFTRedeem'
 import { useHandleNFTTransfer } from './useHandleNFTTransfer'
 import { SOL_NFT_BRIDGE_ADDRESS } from './utils/consts'
+import { sendPostMessage } from './utils/helper'
 
-export const SOURCE_CHAIN: ChainId = CHAIN_ID_ETHEREUM_ROPSTEN
+export const SOURCE_CHAIN: ChainId = process.env.REACT_APP_CLUSTER === 'mainnet' ? CHAIN_ID_ETH : CHAIN_ID_ETHEREUM_ROPSTEN
 export const TARGET_CHAIN: ChainId = CHAIN_ID_SOLANA
 
 export const transferNft = async (
@@ -31,6 +32,7 @@ export const transferNft = async (
     }
 
     try {
+        sendPostMessage('Computing Solana addresses...')
         const targetAddressPubKey: PublicKey = await getSolanaAssociatedTokenAcc(
             sourceAsset,
             sourceTokenId,
@@ -43,6 +45,8 @@ export const transferNft = async (
         const targetAddress = hexToUint8Array(
             uint8ArrayToHex(zeroPad(targetAddressPubKey.toBytes(), 32))
         )
+
+        sendPostMessage('Transfering NFT from Ethereum...')
 
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const signedVAA = await useHandleNFTTransfer(
@@ -58,6 +62,8 @@ export const transferNft = async (
         if (!signedVAA) {
             return Promise.reject('signedVAA is null')
         }
+
+        sendPostMessage('Start redemming NFT on Solana...')
 
         // eslint-disable-next-line react-hooks/rules-of-hooks
         return await useHandleNFTRedeem(solanaWallet, signedVAA)()

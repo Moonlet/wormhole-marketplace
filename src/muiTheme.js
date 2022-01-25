@@ -21,9 +21,9 @@ export const theme = responsiveFontSizes(
                 900: '#21272d',
             },
         },
-        typography: {
-            fontFamily: 'Roboto',
-        },
+        // typography: {
+        //     fontFamily: 'Roboto',
+        // },
         components: {
             MuiButton: {
                 styleOverrides: {
