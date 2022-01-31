@@ -26,13 +26,10 @@ import { getMetadataAddress } from './utils/metaplex'
 import { signSendAndConfirm } from './utils/solana'
 
 async function solana(
-    // dispatch: any,
-    // enqueueSnackbar: any,
     wallet: WalletContextState,
     payerAddress: string, //TODO: we may not need this since we have wallet
     signedVAA: Uint8Array
 ) {
-    // dispatch(setIsRedeeming(true))
     let finalMintAddress = ''
     try {
         if (!wallet.signTransaction) {
@@ -96,17 +93,8 @@ async function solana(
                 console.log('create meta Tx: ', txid)
             }
         }
-        // dispatch(setRedeemTx({ id: txid || '', block: 1 }))
-        // enqueueSnackbar(null, {
-        //     content: <Alert severity="success">Transaction confirmed</Alert>,
-        // })
     } catch (e) {
-        // eslint-disable-next-line no-console
         console.log(e)
-        // enqueueSnackbar(null, {
-        //     content: <Alert severity="error">{parseError(e)}</Alert>,
-        // })
-        // dispatch(setIsRedeeming(false))
     }
 
     return finalMintAddress

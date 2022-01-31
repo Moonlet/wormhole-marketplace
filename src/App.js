@@ -1,4 +1,4 @@
-import Tiexo from './components/Tiexo'
+import Tiexo from './components'
 
 function App() {
     return (

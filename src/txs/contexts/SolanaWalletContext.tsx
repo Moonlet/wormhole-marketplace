@@ -15,11 +15,6 @@ export const SolanaWalletProvider: FC = props => {
         return [
             getPhantomWallet(),
             getSolflareWallet(),
-            // getTorusWallet({
-            //     options: { clientId: 'Go to https://developer.tor.us and create a client ID' }
-            // }),
-            // getLedgerWallet(),
-            // getSolongWallet(),
             getMathWallet(),
             getSolletWallet(),
         ]

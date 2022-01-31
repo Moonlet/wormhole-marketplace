@@ -26,8 +26,6 @@ import { sendPostMessage } from './utils/helper'
 
 // eth tx
 async function evm(
-    // dispatch: any,
-    // enqueueSnackbar: any,
     signer: Signer,
     tokenAddress: string,
     tokenId: string,
@@ -35,7 +33,6 @@ async function evm(
     recipientAddress: Uint8Array,
     chainId: ChainId
 ): Promise<string | null> {
-    // dispatch(setIsSending(true))
     try {
         sendPostMessage('Wait confirmation on Ethereum blockchain...')
         const receipt = await transferFromEth(
@@ -49,19 +46,10 @@ async function evm(
 
         // eslint-disable-next-line no-console
         console.log({ id: receipt.transactionHash, block: receipt.blockNumber })
-        // dispatch(
-        //   setTransferTx({ id: receipt.transactionHash, block: receipt.blockNumber })
-        // )
-        // enqueueSnackbar(null, {
-        //   content: <Alert severity="success">Transaction confirmed</Alert>,
-        // })
         sendPostMessage('Transaction confirmed.')
 
         const sequence = parseSequenceFromLogEth(receipt, getBridgeAddressForChain(chainId))
         const emitterAddress = getEmitterAddressEth(getNFTBridgeAddressForChain(chainId))
-        // enqueueSnackbar(null, {
-        //   content: <Alert severity="info">Fetching VAA</Alert>,
-        // })
         sendPostMessage('Fetching VAA...')
         const { vaaBytes } = await getSignedVAAWithRetry(
             chainId,
@@ -70,31 +58,22 @@ async function evm(
         )
         sendPostMessage('Fetched Signed VAA successfully...')
         return uint8ArrayToHex(vaaBytes)
-        // dispatch(setSignedVAAHex(uint8ArrayToHex(vaaBytes)))
-        // enqueueSnackbar(null, {
-        //   content: <Alert severity="success">Fetched Signed VAA</Alert>,
-        // })
     } catch (e) {
         // eslint-disable-next-line no-console
         console.error(e)
         return null
-        // enqueueSnackbar(null, {
-        //   content: <Alert severity="error">{parseError(e)}</Alert>,
-        // })
-        // dispatch(setIsSending(false))
     }
 }
 
 export function useHandleNFTTransfer(
-    sourceTokenAddress: string /**tokenAddress in ETH  "0xdff0cbb0a50cc3eaf8242414380eb04c7283f513" */,
-    sourceTokenId: string /** '15487864439031792820769872793764920336287736338831218889832296222679724195845" */,
+    sourceTokenAddress: string,
+    sourceTokenId: string,
     targetAddress: Uint8Array,
     ethProvider: IEthereumProviderContext
 ) {
     const { signer } = ethProvider
 
     return () => {
-        // TODO: we should separate state for transaction vs fetching vaa
         if (
             isEVMChain(SOURCE_CHAIN) &&
             !!signer &&

@@ -6,7 +6,6 @@ import {
     uint8ArrayToHex,
 } from '@certusone/wormhole-sdk/lib/cjs/utils'
 import { getForeignAssetSol as getForeignAssetSolNFT } from '@certusone/wormhole-sdk/lib/esm/nft_bridge'
-// import {getForeignAssetSol as getForeignAssetSolNFT} from '../../../sdk/js/src/nft_bridge/getForeignAsset'
 import { BigNumber } from '@ethersproject/bignumber'
 import { ASSOCIATED_TOKEN_PROGRAM_ID, Token, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { WalletContextState } from '@solana/wallet-adapter-react'
